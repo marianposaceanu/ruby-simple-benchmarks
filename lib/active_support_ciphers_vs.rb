@@ -4,7 +4,9 @@ require 'active_support'
 
 module BfThinLayer
   class CryptStore
-    SALT = "\r\xFD\xF8L\xDD3\xB4V\xC8,\ei;`\xBB6\n\x82'\x024\x1D\xD9\x05\xFD\xC3\x8F\x89'S\xB6\xA2\f\a\xD4\xF2;\xD8p\xC7\xE6\n7[R\x87\xDB,\x03P\x7F\x10\n0kf%\r\xC4\x1A\xA0c\x92\x9B"
+    SECRET_KEY = "x" * 64 
+    SALT       = "\r\xFD\xF8L\xDD3\xB4V\xC8,\ei;`\xBB6\n\x82'\x024\x1D\xD9\x05\xFD\xC3\x8F\x89"
+    KEY        = ActiveSupport::KeyGenerator.new(SECRET_KEY).generate_key(SALT).freeze
 
     class << self
       attr_accessor :cipher
@@ -20,12 +22,7 @@ module BfThinLayer
       private
 
       def message_encryptor
-        @encryptor = ActiveSupport::MessageEncryptor.new(key, cipher: @cipher)
-      end
-
-      def key
-        secret_token = 'this-is-a-secret'
-        key = ActiveSupport::KeyGenerator.new(secret_token).generate_key(SALT)
+        @encryptor = ActiveSupport::MessageEncryptor.new(KEY, cipher: @cipher)
       end
     end
   end
