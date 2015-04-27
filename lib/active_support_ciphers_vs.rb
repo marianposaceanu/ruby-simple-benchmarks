@@ -10,13 +10,11 @@ module BfThinLayer
       attr_accessor :cipher
 
       def load(value)
-        crypt = ActiveSupport::MessageEncryptor.new(key)
-        crypt.decrypt_and_verify(value)
+        message_encryptor.decrypt_and_verify(value)
       end
 
       def dump(value)
-        crypt = ActiveSupport::MessageEncryptor.new(key)
-        crypt.encrypt_and_sign(value)
+        message_encryptor.encrypt_and_sign(value)
       end
 
       private
