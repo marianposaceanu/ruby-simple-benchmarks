@@ -10,16 +10,12 @@ module BfThinLayer
 
       def load(value)
         cipher.decrypt
-        cipher.key = key
-        cipher.iv  = SALT
 
         cipher.update(value) + cipher.final
       end
 
       def dump(value)
         cipher.encrypt
-        cipher.key = key
-        cipher.iv  = SALT
 
         cipher.update(value) + cipher.final
       end
@@ -28,7 +24,10 @@ module BfThinLayer
 
       def cipher
         @cipher_algorithm ||= 'aes-256-cbc'
-        @cipher_diges     ||= OpenSSL::Cipher.new(@cipher_algorithm)
+        @cipher_digest    ||= OpenSSL::Cipher.new(@cipher_algorithm)
+        @cipher_digest.key  = key
+        @cipher_digest.iv   = SALT
+        @cipher_digest
       end
 
       def key
